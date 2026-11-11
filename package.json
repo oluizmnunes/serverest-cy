@@ -1,0 +1,23 @@
+{
+  "name": "serverest-cy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oluizmnunes/serverest-cy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oluizmnunes/serverest-cy/issues"
+  },
+  "homepage": "https://github.com/oluizmnunes/serverest-cy#readme",
+  "description": "",
+  "devDependencies": {
+    "cypress": "^16.3.0"
+  }
+}
