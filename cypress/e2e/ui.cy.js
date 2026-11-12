@@ -1,4 +1,8 @@
+import LoginPage from '../page_objects/LoginPage';
+
 describe("ServeRest frontend", () => {
+  const loginPage = new LoginPage();
+
   it("registers a new admin user and lands on the admin home", () => {
     const id = Cypress._.random(100, 999);
     const user = {
@@ -20,10 +24,7 @@ describe("ServeRest frontend", () => {
   });
 
   it("shows an error and stays on the login page for invalid credentials", () => {
-    cy.visit("/login");
-    cy.get('[data-testid="email"]').type("nobody@test.com");
-    cy.get('[data-testid="senha"]').type("Password@123");
-    cy.get('[data-testid="entrar"]').click();
+    loginPage.login({ email: "nobody@test.com", password: "Password@123" });
 
     cy.contains("Email e/ou senha inválidos").should("be.visible");
     cy.url().should("include", "/login");
