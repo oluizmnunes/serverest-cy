@@ -30,4 +30,22 @@ describe('ServeRest API tests', () => {
         });
       });
     });
+
+    it('rejects a second user with an already registered email', () => {
+        const apiUrl = 'https://serverest.dev';
+        const id = Cypress._.random(100, 999);
+        const existingUser = {
+            nome: `user${id}`,
+            email: `user${id}@test.com`,
+            password: 'Password@123',
+            administrador: 'true',
+          };
+
+        const duplicateUser = {
+            nome: `duplicateduser${id}`,
+            email: existingUser.email,
+            password: 'Password@123',
+            administrador: 'true',
+          };
+      });
   });
