@@ -1,11 +1,13 @@
 import LoginPage from '../page_objects/LoginPage';
 import RegisterPage from '../page_objects/RegisterPage';
 import AdminPage from '../page_objects/AdminPage';
+import ProductsPage from '../page_objects/ProductsPage';
 
 describe("ServeRest frontend", () => {
   const loginPage = new LoginPage();
   const registerPage = new RegisterPage();
   const adminPage = new AdminPage();
+  const productsPage = new ProductsPage();
   
   it("registers a new admin user and lands on the admin home", () => {
     const id = Cypress._.random(100, 999);
@@ -60,13 +62,9 @@ describe("ServeRest frontend", () => {
         descricao: "Teclado mecânico",
         quantidade: "10",
       };
-      
+
       adminPage.openProductRegistration();
-      cy.get('[data-testid="nome"]').type(product.nome);
-      cy.get('[data-testid="preco"]').type(product.preco);
-      cy.get('[data-testid="descricao"]').type(product.descricao);
-      cy.get('[data-testid="quantity"]').type(product.quantidade);
-      cy.get('[data-testid="cadastarProdutos"]').click();
+      productsPage.create(product);
 
       cy.url().should("include", "/admin/listarprodutos");
       cy.contains("td", product.nome).should("be.visible");
