@@ -1,7 +1,9 @@
 import LoginPage from '../page_objects/LoginPage';
+import RegisterPage from '../page_objects/RegisterPage';
 
 describe("ServeRest frontend", () => {
   const loginPage = new LoginPage();
+  const registerPage = new RegisterPage();
 
   it("registers a new admin user and lands on the admin home", () => {
     const id = Cypress._.random(100, 999);
@@ -11,12 +13,7 @@ describe("ServeRest frontend", () => {
       password: "Password@123",
     };
 
-    cy.visit("/cadastrarusuarios");
-    cy.get('[data-testid="nome"]').type(user.nome);
-    cy.get('[data-testid="email"]').type(user.email);
-    cy.get('[data-testid="password"]').type(user.password);
-    cy.get('[data-testid="checkbox"]').check();
-    cy.get('[data-testid="cadastrar"]').click();
+    registerPage.register(user);
 
     cy.contains("Cadastro realizado com sucesso").should("be.visible");
     cy.url().should("include", "/admin/home");
