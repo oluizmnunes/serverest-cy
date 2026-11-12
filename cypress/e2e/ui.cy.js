@@ -25,7 +25,51 @@ describe("ServeRest frontend", () => {
     cy.get('[data-testid="senha"]').type("Password@123");
     cy.get('[data-testid="entrar"]').click();
 
-    cy.contains('Email e/ou senha inválidos').should("be.visible");
+    cy.contains("Email e/ou senha inválidos").should("be.visible");
     cy.url().should("include", "/login");
+  });
+
+  describe("as an authenticated admin", () => {
+    beforeEach(() => {
+      const id = Cypress._.random(100, 999);
+      const admin = {
+        nome: `user${id}`,
+        email: `user${id}@test.com`,
+        password: "Password@123",
+        administrador: "true",
+      };
+
+      cy.request({
+        method: "POST",
+        url: `https://serverest.dev/usuarios`,
+        body: admin,
+      }).then((response) => {
+        expect(response.status).to.eq(201);
+
+        cy.visit("/login");
+        cy.get('[data-testid="email"]').type(admin.email);
+        cy.get('[data-testid="senha"]').type(admin.password);
+        cy.get('[data-testid="entrar"]').click();
+      });
+    });
+
+    it("creates a product and sees it in the product list", () => {
+      const product = {
+        nome: 'Teclado' + Cypress._.random(100, 999),
+        preco: "250",
+        descricao: "Teclado mecânico",
+        quantidade: "10",
+      };
+
+      cy.get('[data-testid="cadastrarProdutos"]').click();
+      cy.get('[data-testid="nome"]').type(product.nome);
+      cy.get('[data-testid="preco"]').type(product.preco);
+      cy.get('[data-testid="descricao"]').type(product.descricao);
+      cy.get('[data-testid="quantity"]').type(product.quantidade);
+      cy.get('[data-testid="cadastarProdutos"]').click();
+
+      cy.url().should("include", "/admin/listarprodutos");
+      cy.contains("td", product.nome).should("be.visible");
+    });
   });
 });
