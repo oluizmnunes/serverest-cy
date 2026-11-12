@@ -1,0 +1,9 @@
+{
+    "API": {
+      "USERS": "https://serverest.dev/usuarios"
+    },
+    "MESSAGES": {
+      "SUCCESS_REGISTER": "Cadastro realizado com sucesso",
+      "INVALID_CREDENTIALS": "Email e/ou senha inválidos"
+    }
+  }

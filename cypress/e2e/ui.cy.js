@@ -9,6 +9,7 @@ describe("ServeRest frontend", () => {
   const adminPage = new AdminPage();
   const productsPage = new ProductsPage();
   
+  let constants = require('../fixtures/constants.json');
   it("registers a new admin user and lands on the admin home", () => {
     const id = Cypress._.random(100, 999);
     const user = {
@@ -19,7 +20,7 @@ describe("ServeRest frontend", () => {
 
     registerPage.register(user);
 
-    cy.contains("Cadastro realizado com sucesso").should("be.visible");
+    cy.contains(constants.MESSAGES.SUCCESS_REGISTER).should("be.visible");
     cy.url().should("include", "/admin/home");
     cy.contains(`Bem Vindo ${user.nome}`).should("be.visible");
   });
@@ -27,7 +28,7 @@ describe("ServeRest frontend", () => {
   it("shows an error and stays on the login page for invalid credentials", () => {
     loginPage.login({ email: "nobody@test.com", password: "Password@123" });
 
-    cy.contains("Email e/ou senha inválidos").should("be.visible");
+    cy.contains(constants.MESSAGES.INVALID_CREDENTIALS).should("be.visible");
     cy.url().should("include", "/login");
   });
 
@@ -43,7 +44,7 @@ describe("ServeRest frontend", () => {
 
       cy.request({
         method: "POST",
-        url: `https://serverest.dev/usuarios`,
+        url: constants.API.USERS,
         body: admin,
       }).then((response) => {
         expect(response.status).to.eq(201);
