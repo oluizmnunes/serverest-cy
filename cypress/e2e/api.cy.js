@@ -1,6 +1,7 @@
 describe("ServeRest API tests", () => {
+  let constants = require('../fixtures/constants.json');
+
   it("creates a user and retrieves it by id", () => {
-    const apiUrl = "https://serverest.dev";
     const id = Cypress._.random(100, 999);
     const user = {
       nome: `user${id}`,
@@ -11,18 +12,18 @@ describe("ServeRest API tests", () => {
 
     cy.request({
       method: "POST",
-      url: `${apiUrl}/usuarios`,
+      url: constants.API.USERS,
       body: user,
     })
       .then((createResponse) => {
         expect(createResponse.status).to.eq(201);
         expect(createResponse.body.message).to.eq(
-          "Cadastro realizado com sucesso",
+          constants.MESSAGES.SUCCESS_REGISTER,
         );
         expect(createResponse.body).to.have.property("_id");
 
         return cy.request({
-          url: `${apiUrl}/usuarios/${createResponse.body._id}`,
+          url: `${constants.API.USERS}/${createResponse.body._id}`,
         });
       })
       .then((getResponse) => {
@@ -36,7 +37,6 @@ describe("ServeRest API tests", () => {
   });
 
   it("rejects a second user with an already registered email", () => {
-    const apiUrl = "https://serverest.dev";
     const id = Cypress._.random(100, 999);
     const existingUser = {
       nome: `user${id}`,
@@ -54,7 +54,7 @@ describe("ServeRest API tests", () => {
 
     cy.request({
       method: "POST",
-      url: `${apiUrl}/usuarios`,
+      url: constants.API.USERS,
       body: existingUser,
       failOnStatusCode: false,
     })
@@ -63,7 +63,7 @@ describe("ServeRest API tests", () => {
 
         return cy.request({
           method: "POST",
-          url: `${apiUrl}/usuarios`,
+          url: constants.API.USERS,
           body: duplicateUser,
           failOnStatusCode: false,
         });
@@ -77,7 +77,6 @@ describe("ServeRest API tests", () => {
   });
 
   it("only lets an authenticated admin create products", () => {
-    const apiUrl = "https://serverest.dev";
     const id = Cypress._.random(100, 999);
     const admin = {
       nome: `admin${id}`,
@@ -96,7 +95,7 @@ describe("ServeRest API tests", () => {
 
     cy.request({ // try to create product with no token 
       method: "POST",
-      url: `${apiUrl}/produtos`,
+      url: constants.API.PRODUCTS,
       body: product,
       failOnStatusCode: false,
     })
@@ -104,7 +103,7 @@ describe("ServeRest API tests", () => {
         expect(response.status).to.eq(401); // proves endpoint is protected
         return cy.request({
           method: "POST",
-          url: `${apiUrl}/usuarios`, // create admin user
+          url: constants.API.USERS, // create admin user
           body: admin,
           failOnStatusCode: false,
         });
@@ -113,7 +112,7 @@ describe("ServeRest API tests", () => {
         expect(response.status).to.eq(201);
         return cy.request({
           method: "POST",
-          url: `${apiUrl}/login`, // login admin user
+          url: constants.API.LOGIN, // login admin user
           body: { email: admin.email, password: admin.password },
           failOnStatusCode: false,
         });
@@ -124,7 +123,7 @@ describe("ServeRest API tests", () => {
 
         return cy.request({
           method: "POST",
-          url: `${apiUrl}/produtos`, // create product with token
+          url: constants.API.PRODUCTS, // create product with token
           body: product,
           headers: { Authorization: token },
           failOnStatusCode: false,
@@ -132,11 +131,11 @@ describe("ServeRest API tests", () => {
       })
       .then((response) => {
         expect(response.status).to.eq(201);
-        expect(response.body.message).to.eq("Cadastro realizado com sucesso");
+        expect(response.body.message).to.eq(constants.MESSAGES.SUCCESS_REGISTER);
 
         return cy.request({
           method: "DELETE",
-          url: `${apiUrl}/produtos/${response.body._id}`, // delete product with token
+          url: `${constants.API.PRODUCTS}/${response.body._id}`, // delete product with token
           headers: { Authorization: token },
           failOnStatusCode: false,
         });

@@ -1,6 +1,8 @@
 {
     "API": {
-      "USERS": "https://serverest.dev/usuarios"
+      "LOGIN": "https://serverest.dev/login",
+      "USERS": "https://serverest.dev/usuarios",
+      "PRODUCTS": "https://serverest.dev/produtos"
     },
     "MESSAGES": {
       "SUCCESS_REGISTER": "Cadastro realizado com sucesso",
