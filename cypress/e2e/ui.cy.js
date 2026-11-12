@@ -18,4 +18,14 @@ describe("ServeRest frontend", () => {
     cy.url().should("include", "/admin/home");
     cy.contains(`Bem Vindo ${user.nome}`).should("be.visible");
   });
+
+  it("shows an error and stays on the login page for invalid credentials", () => {
+    cy.visit("/login");
+    cy.get('[data-testid="email"]').type("nobody@test.com");
+    cy.get('[data-testid="senha"]').type("Password@123");
+    cy.get('[data-testid="entrar"]').click();
+
+    cy.contains('Email e/ou senha inválidos').should("be.visible");
+    cy.url().should("include", "/login");
+  });
 });
