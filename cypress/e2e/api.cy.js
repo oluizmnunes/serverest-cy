@@ -47,5 +47,26 @@ describe('ServeRest API tests', () => {
             password: 'Password@123',
             administrador: 'true',
           };
+
+          cy.request({
+            method: 'POST',
+            url: `${apiUrl}/usuarios`,
+            body: existingUser,
+            failOnStatusCode: false,
+          })
+            .then((createResponse) => {
+              expect(createResponse.status).to.eq(201);
+      
+              return cy.request({
+                method: 'POST',
+                url: `${apiUrl}/usuarios`,
+                body: duplicateUser,
+                failOnStatusCode: false,
+              });
+            })
+            .then((duplicateResponse) => {
+              expect(duplicateResponse.status).to.eq(400);
+              expect(duplicateResponse.body.message).to.eq('Este email já está sendo usado');
+            });
       });
   });
