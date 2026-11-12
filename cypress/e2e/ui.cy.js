@@ -2,6 +2,7 @@ import LoginPage from '../page_objects/LoginPage';
 import RegisterPage from '../page_objects/RegisterPage';
 import AdminPage from '../page_objects/AdminPage';
 import ProductsPage from '../page_objects/ProductsPage';
+import { uniqueUser, uniqueProduct } from '../support/helpers';
 
 describe("ServeRest frontend", () => {
   const loginPage = new LoginPage();
@@ -11,12 +12,7 @@ describe("ServeRest frontend", () => {
   
   let constants = require('../fixtures/constants.json');
   it("registers a new admin user and lands on the admin home", () => {
-    const id = Cypress._.random(100, 999);
-    const user = {
-      nome: `user${id}`,
-      email: `user${id}@test.com`,
-      password: "Password@123",
-    };
+    const user = uniqueUser();
 
     registerPage.register(user);
 
@@ -34,13 +30,7 @@ describe("ServeRest frontend", () => {
 
   describe("as an authenticated admin", () => {
     beforeEach(() => {
-      const id = Cypress._.random(100, 999);
-      const admin = {
-        nome: `user${id}`,
-        email: `user${id}@test.com`,
-        password: "Password@123",
-        administrador: "true",
-      };
+      const admin = uniqueUser("true");
 
       cy.request({
         method: "POST",
@@ -57,12 +47,7 @@ describe("ServeRest frontend", () => {
     });
 
     it("creates a product and sees it in the product list", () => {
-      const product = {
-        nome: 'Teclado' + Cypress._.random(100, 999),
-        preco: "250",
-        descricao: "Teclado mecânico",
-        quantidade: "10",
-      };
+      const product = uniqueProduct();
 
       adminPage.openProductRegistration();
       productsPage.create(product);
