@@ -1,14 +1,10 @@
+import { uniqueUser, uniqueProduct } from '../support/helpers';
+
 describe("ServeRest API tests", () => {
   let constants = require('../fixtures/constants.json');
 
   it("creates a user and retrieves it by id", () => {
-    const id = Cypress._.random(100, 999);
-    const user = {
-      nome: `user${id}`,
-      email: `user${id}@test.com`,
-      password: "Password@123",
-      administrador: "true",
-    };
+    const user = uniqueUser();
 
     cy.request({
       method: "POST",
@@ -37,19 +33,10 @@ describe("ServeRest API tests", () => {
   });
 
   it("rejects a second user with an already registered email", () => {
-    const id = Cypress._.random(100, 999);
-    const existingUser = {
-      nome: `user${id}`,
-      email: `user${id}@test.com`,
-      password: "Password@123",
-      administrador: "true",
-    };
-
+    const existingUser = uniqueUser();
     const duplicateUser = {
-      nome: `duplicateduser${id}`,
+      ...uniqueUser(),
       email: existingUser.email,
-      password: "Password@123",
-      administrador: "true",
     };
 
     cy.request({
@@ -77,19 +64,8 @@ describe("ServeRest API tests", () => {
   });
 
   it("only lets an authenticated admin create products", () => {
-    const id = Cypress._.random(100, 999);
-    const admin = {
-      nome: `admin${id}`,
-      email: `admin${id}@test.com`,
-      password: "Password@123",
-      administrador: "true",
-    };
-    const product = {
-      nome: `Mouse ${id}`,
-      preco: 150,
-      descricao: "Mouse sem fio",
-      quantidade: 20,
-    };
+    const admin = uniqueUser();
+    const product = uniqueProduct();
 
     let token;
 
