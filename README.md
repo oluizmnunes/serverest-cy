@@ -18,6 +18,12 @@ npx cypress open      # interactive
 npx cypress run       # headless
 ```
 
+## Cypress Cloud reports
+
+After the pipeline runs on GitHub Actions, test reports are available on [Cypress Cloud](https://cloud.cypress.io/projects/fvtch4/). Open the **Runs** tab for detailed results, including screenshots and videos of the test runs.
+
+![Cypress Cloud Runs tab with recorded test runs](assets/cypress-cloud.png)
+
 ## Structure
 
 ```
