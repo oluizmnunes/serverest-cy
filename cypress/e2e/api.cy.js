@@ -39,16 +39,16 @@ describe('ServeRest API tests', () => {
             email: `user${id}@test.com`,
             password: 'Password@123',
             administrador: 'true',
-          };
+        };
 
         const duplicateUser = {
             nome: `duplicateduser${id}`,
             email: existingUser.email,
             password: 'Password@123',
             administrador: 'true',
-          };
+        };
 
-          cy.request({
+        cy.request({
             method: 'POST',
             url: `${apiUrl}/usuarios`,
             body: existingUser,
@@ -69,4 +69,21 @@ describe('ServeRest API tests', () => {
               expect(duplicateResponse.body.message).to.eq('Este email já está sendo usado');
             });
       });
+
+      it('only lets an authenticated admin create products', () => {
+        const apiUrl = 'https://serverest.dev';
+        const id = Cypress._.random(100, 999);
+        const admin = {
+            nome: `admin${id}`,
+            email: `admin${id}@test.com`,
+            password: 'Password@123',
+            administrador: 'true',
+        };
+        const product = {
+          nome: `Mouse ${id}`,
+          preco: 150,
+          descricao: 'Mouse sem fio',
+          quantidade: 20,
+        };
+    });
   });
