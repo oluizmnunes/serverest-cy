@@ -11,6 +11,7 @@ describe("ServeRest frontend", () => {
   const productsPage = new ProductsPage();
   
   let constants = require('../fixtures/constants.json');
+  
   it("registers a new admin user and lands on the admin home", () => {
     const user = uniqueUser();
 
