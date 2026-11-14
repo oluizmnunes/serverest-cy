@@ -1,6 +1,11 @@
 # ServeRest – Cypress tests
 
-E2E (frontend) and API tests for [ServeRest](https://front.serverest.dev/), written in Cypress + JavaScript.
+E2E (frontend) and API tests for ServeRest, written in Cypress + JavaScript.
+
+## Application under test
+
+- Frontend: https://front.serverest.dev
+- API (Swagger): https://serverest.dev
 
 ## Prerequisites
 
